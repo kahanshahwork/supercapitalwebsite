@@ -183,8 +183,8 @@ export default function AboutView() {
             delay={3}
             initials="MP"
             name="Meetkumar Shaileshkumar Patel"
-            role="Co-Founder & Designated Partner"
-            bio="Meet is a member of the key investment team at Super Fund Managers LLP and is actively involved in investment research, portfolio oversight, and operational management. His experience spans investment analysis, financial planning, portfolio construction, and advisory support within regulated financial markets."
+            role="Fund Manager"
+            bio="Meet is fund manager at Super Fund Managers LLP and is actively involved in investment research, portfolio oversight, and operational management. His experience spans investment analysis, financial planning, portfolio construction, and advisory support within regulated financial markets."
             qualifications={[
               'CFA',
               'MBA (Finance), IMT Ghaziabad',
