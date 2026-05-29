@@ -72,7 +72,7 @@ function QuantamentalWord() {
         } else {
           // Locked: Playfair Display bold, clean solid teal, no glow, no dots
           ctx.font = `700 38px 'Playfair Display', 'Cormorant Garamond', serif`;
-          ctx.fillStyle = '#0B6E6A';
+          ctx.fillStyle = '#012956';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
           ctx.fillText(ch, x, y);
@@ -124,7 +124,7 @@ function QuantamentalWord() {
         fontSize: '0.99rem',
         letterSpacing: '0.28em',
         textTransform: 'uppercase',
-        color: '#0B6E6A',
+        color: '#012956',
         opacity: 0.65,
         marginTop: '0.1rem',
         paddingLeft: 4,
@@ -175,7 +175,7 @@ export default function HomeView({ setView }: Props) {
           <motion.div initial={{ opacity:0,y:22 }} animate={{ opacity:1,y:0 }} transition={{ duration:0.6 }}>
             <div style={hs.h1Main}>Super</div>
             <div style={hs.h1It}>Capital</div>
-            <div style={hs.h1Sub}> Asset Management</div>
+            <div style={hs.h1Sub}></div>
           </motion.div>
 
           {/* SEBI tag below brand */}

@@ -208,7 +208,7 @@ export default function AboutView() {
         </div>
 
       </Section>
-      <PageFooter disc="© 2024 Super Fund Managers LLP. SEBI Registered Category III AIF. For eligible investors only." />
+      <PageFooter disc="© 2026 Super Capital. For Super Capital by Elevate Securi & Consultancy" />
     </div>
   );
 }
