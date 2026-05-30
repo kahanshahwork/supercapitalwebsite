@@ -106,13 +106,10 @@ const styles: Record<string, React.CSSProperties> = {
     flexShrink: 0,
   },
   logoImg: {
-    /* 771×502 native — render tall so horse + text both show clearly */
-    height: 58,
+    height: 90,
     width: 'auto',
     display: 'block',
     objectFit: 'contain',
-    /* multiply: black pixels become invisible, logo colours remain */
-    mixBlendMode: 'multiply' as React.CSSProperties['mixBlendMode'],
   },
   nav: {
     display: 'flex', gap: '2.5rem',
