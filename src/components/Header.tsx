@@ -99,10 +99,10 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'flex', alignItems: 'center',
     flexShrink: 0,
     height: '100%',
-    padding: '8px 0',
+    padding: '12px 0 2px 0',
   },
   logoImg: {
-    height: '200%',
+    height: '225%',
     width: '200%',
     display: 'block',
     objectFit: 'contain',
