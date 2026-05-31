@@ -7,7 +7,7 @@ export function Label({ children }: { children: React.ReactNode }) {
   return (
     <span style={{
       fontFamily: "'DM Mono', monospace",
-      fontSize: '0.62rem', letterSpacing: '0.22em', textTransform: 'uppercase',
+      fontSize: '0.9rem', letterSpacing: '0.22em', textTransform: 'uppercase',
       color: 'var(--ink-3)', display: 'block', marginBottom: '1.2rem',
     }}>
       {children}

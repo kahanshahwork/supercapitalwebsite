@@ -17,7 +17,9 @@ const INFO_ROWS = [
   ['Trust',      'Super Capital Trust'],
   ['Regulatory', 'SEBI Cat. III AIF'],
   ['Minimum',    '₹1 Crore'],
-  ['Email',      'investors@supercapital.in'],
+  ['Email',      'sfm@supercapital.co.in'],
+  ['Phone',      '+91 63533 73149'],
+  ['Address',    'GIDC Plot 1/12 Highway, Near Saij Overbridge, Kalol Industrial Estate, Gandhi Nagar, Kalol, Gujarat – 382725'],
 ];
 
 export default function ContactView() {
@@ -28,7 +30,7 @@ export default function ContactView() {
         <motion.div initial={{ opacity:0,y:20 }} animate={{ opacity:1,y:0 }} transition={{ duration:0.6 }}>
           <Label>Investor Relations</Label>
           <Display size="xl" style={{ marginBottom:'1.4rem' }}>Connect<br /><It>with us.</It></Display>
-          <Body style={{ maxWidth:500, marginBottom:'3.5rem' }}>For eligible investors and prospective capital allocators. We respond within 48 hours.</Body>
+          <Body style={{ maxWidth:500, marginBottom:'3.5rem' }}></Body>
         </motion.div>
 
         <div style={{ display:'grid',gridTemplateColumns: mob ? '1fr' : '1fr 1.5fr',gap: mob ? '2rem' : '5vw' }}>
@@ -36,9 +38,9 @@ export default function ContactView() {
             <div style={f.sectionLabel}>Contact Details</div>
             <div style={{ background:'var(--bg-card)',border:'1px solid var(--border)',borderRadius:16,overflow:'hidden' }}>
               {INFO_ROWS.map(([k,v],i) => (
-                <div key={k} style={{ display:'flex',justifyContent:'space-between',alignItems:'center',padding:'1rem 1.3rem',borderBottom:i<INFO_ROWS.length-1?'1px solid var(--border)':'none',flexWrap:'wrap',gap:'0.5rem' }}>
-                  <span style={{ fontSize:'0.82rem',color:'var(--ink-3)' }}>{k}</span>
-                  <span style={{ fontSize:'0.82rem',color:'var(--ink)',fontWeight:400 }}>{v}</span>
+                <div key={k} style={{ display:'flex',justifyContent:'space-between',alignItems:'flex-start',padding:'1rem 1.3rem',borderBottom:i<INFO_ROWS.length-1?'1px solid var(--border)':'none',flexWrap:'wrap',gap:'0.5rem' }}>
+                  <span style={{ fontSize:'0.82rem',color:'var(--ink-3)',flexShrink:0,paddingTop:1 }}>{k}</span>
+                  <span style={{ fontSize:'0.82rem',color:'var(--ink)',fontWeight:400,textAlign:'right',maxWidth:'60%' }}>{v}</span>
                 </div>
               ))}
             </div>

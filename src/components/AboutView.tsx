@@ -44,7 +44,7 @@ function LeaderCard({ name, role, bio, qualifications, initials, delay }: {
             <span style={{ fontFamily:"'Instrument Serif',serif",fontSize:'1.3rem',fontWeight:400,color:'var(--teal)',letterSpacing:'-0.02em' }}>{initials}</span>
           </div>
           <div>
-            <div style={{ fontFamily:"'Instrument Serif',serif",fontSize:'1.2rem',fontWeight:400,color:'var(--ink)',lineHeight:1.2,marginBottom:'0.3rem' }}>{name}</div>
+            <div style={{ fontFamily:"'Instrument Serif',serif",fontSize:'1.9rem',fontWeight:400,color:'var(--ink)',lineHeight:1.2,marginBottom:'0.3rem' }}>{name}</div>
             <div style={{ fontFamily:"'DM Mono',monospace",fontSize:'0.58rem',letterSpacing:'0.18em',textTransform:'uppercase',color:'var(--teal)',opacity:0.75 }}>{role}</div>
           </div>
         </div>
@@ -96,8 +96,8 @@ export default function AboutView() {
                 <div style={{ display:'grid',gridTemplateColumns:'1fr 1fr',gap:1,background:'rgba(255,255,255,0.06)',borderRadius:14,overflow:'hidden' }}>
                   {[
                     { val:'Cat. III', lbl:'SEBI AIF Registration' },
-                    { val:'2024',    lbl:'Established' },
-                    { val:'India',   lbl:'Primary Mandate' },
+                    { val:'2026',    lbl:'Established' },
+                    { val:'Open-Ended',   lbl:'Fund Category' },
                     { val:'₹1Cr+',  lbl:'Minimum Commitment' },
                   ].map(({ val, lbl }) => (
                     <div key={lbl} style={{ background:'rgba(255,255,255,0.03)',padding:'1.2rem',textAlign:'center' }}>
@@ -121,12 +121,12 @@ export default function AboutView() {
 
         <div style={{ display:'grid',gridTemplateColumns: mob ? '1fr' : '1fr 1fr',gap:'2rem' }}>
           <LeaderCard
-            delay={3} initials="MP" name="Meetkumar Shaileshkumar Patel" role="Fund Manager"
+            delay={3} initials="MP" name="Meet Patel" role="Fund Manager & Designated Partner"
             bio="Meet is fund manager at Super Fund Managers LLP and is actively involved in investment research, portfolio oversight, and operational management. His experience spans investment analysis, financial planning, portfolio construction, and advisory support within regulated financial markets."
-            qualifications={['CFA','MBA (Finance), IMT Ghaziabad','B.Tech Mechanical Engineering','NISM Category III AIF Managers Certification']}
+            qualifications={['CFA','MBA (Finance), IMT Ghaziabad','NISM Category III AIF Managers Certification']}
           />
           <LeaderCard
-            delay={4} initials="NP" name="Naishadhkumar Rajeshkumar Patel" role="Co-Founder & Designated Partner"
+            delay={4} initials="NP" name="Naishadh Patel" role="Business Development & Designated Partner"
             bio="Naishadh is a member of the key investment team at Super Fund Managers LLP and brings extensive experience across banking, client relationship management, credit assessment, and financial product distribution. His background spans retail banking, HNI client management, branch leadership, and corporate relationship management."
             qualifications={['MBA (Finance)','Bachelor of Commerce (B.Com)']}
           />

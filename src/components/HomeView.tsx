@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, TrendingUp, BarChart3, Cpu, Target, Zap, Lock } from 'lucide-react';
+import { Target, Zap, Lock, Shield } from 'lucide-react';
 import type { AppView } from '../types';
 import {
-  Label, Display, It, Body, Card, CardIcon, CardTitle, CardBody,
+  Label, Display, It, Card, CardTitle, CardBody,
   Btn, Divider, Section, Grid, TwoCol, PageFooter,
 } from './UI';
 
@@ -19,10 +19,11 @@ function useMobile() {
   return mob;
 }
 
+// ─── Hero Orrery (larger on desktop) ─────────────────────────────────────────
 function HeroOrrery() {
   const ref = useRef<HTMLCanvasElement>(null);
   const mob = useMobile();
-  const SIZE = mob ? 300 : 500;
+  const SIZE = mob ? 300 : 620; // increased from 500
 
   useEffect(() => {
     const cv = ref.current; if (!cv) return;
@@ -122,13 +123,14 @@ function HeroOrrery() {
   );
 }
 
+// ─── Quantamental word with matrix effect + close subtitle ────────────────────
 function QuantamentalWord() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number>(0);
   const mob = useMobile();
   const W = mob ? 320 : 560;
-  const H = mob ? 72 : 96;
+  const H = mob ? 60 : 80;
 
   function runAnimation() {
     const cv = canvasRef.current; if (!cv) return;
@@ -151,14 +153,14 @@ function QuantamentalWord() {
         if (t >= l.lockFrame) l.locked = true;
         if (!l.locked) l.scramble = CHARS[Math.floor(Math.random() * CHARS.length)];
         const x = charW * i + charW / 2;
-        const y = H / 2 - 4;
+        const y = H / 2;
         if (!l.locked) {
-          ctx.font = `400 ${mob ? 14 : 20}px 'DM Mono', monospace`;
+          ctx.font = `400 ${mob ? 13 : 18}px 'DM Mono', monospace`;
           ctx.fillStyle = `rgba(1,41,86,${Math.random() > 0.55 ? 0.35 : 0.14})`;
           ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
           ctx.fillText(l.scramble, x, y);
         } else {
-          ctx.font = `700 ${mob ? 24 : 38}px 'Playfair Display', serif`;
+          ctx.font = `700 ${mob ? 26 : 40}px 'Cormorant Garamond', serif`;
           ctx.fillStyle = '#012956';
           ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
           ctx.fillText(ch, x, y);
@@ -184,29 +186,163 @@ function QuantamentalWord() {
   return (
     <div ref={wrapRef} style={{ display: 'inline-block', width: '100%' }}>
       <canvas ref={canvasRef} width={W} height={H} style={{ display: 'block', width: '100%', maxWidth: W }} />
+      {/* Subtitle tight below — Cormorant to match the "Who We Serve" style */}
       <div style={{
-        fontFamily: "'DM Mono', monospace",
-        fontSize: mob ? '0.75rem' : '0.99rem', letterSpacing: '0.28em', textTransform: 'uppercase',
-        color: '#012956', opacity: 0.55, marginTop: '0.1rem', paddingLeft: 4,
+        fontFamily: "'Cormorant Garamond', 'Instrument Serif', serif",
+        fontSize: mob ? '0.95rem' : '1.1rem',
+        letterSpacing: '0.18em',
+        textTransform: 'uppercase',
+        color: '#012956',
+        opacity: 1,
+        marginTop: '-0.3rem',
+        paddingLeft: 2,
+        fontWeight: 400,
       }}>
-        investing approach
+        Investing Approach
       </div>
     </div>
   );
 }
 
+// ─── Marquee scrolling taglines ───────────────────────────────────────────────
+const MARQUEE_LINES = [
+  'Where Research Meets Conviction',
+  'Where Capital Meets Opportunity',
+  'Where Discipline Creates Wealth',
+];
+
+function MarqueeTicker() {
+  const [idx, setIdx] = useState(0);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setVisible(false);
+      setTimeout(() => {
+        setIdx(prev => (prev + 1) % MARQUEE_LINES.length);
+        setVisible(true);
+      }, 500);
+    }, 3200);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div style={{
+      overflow: 'hidden',
+      height: '2.2rem',
+      display: 'flex',
+      alignItems: 'center',
+      marginTop: '4rem',
+      marginBottom: '2.2rem',
+    }}>
+      <div style={{
+        fontFamily: "'Cormorant Garamond', 'Instrument Serif', serif",
+        fontSize: 'clamp(1.6rem, 2.4vw, 2.2rem)',
+        fontWeight: 500,
+        fontStyle: 'italic',
+        color: 'var(--teal)',
+        letterSpacing: '-0.01em',
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'translateY(0)' : 'translateY(8px)',
+        transition: 'opacity 0.45s ease, transform 0.45s ease',
+        whiteSpace: 'nowrap',
+      }}>
+        {MARQUEE_LINES[idx]}
+      </div>
+    </div>
+  );
+}
+
+// ─── About section decorative graphic ────────────────────────────────────────
+function AboutGraphic() {
+  const ref = useRef<HTMLCanvasElement>(null);
+  useEffect(() => {
+    const cv = ref.current; if (!cv) return;
+    const ctx = cv.getContext('2d')!;
+    const W = 380, H = 300, cx = W / 2, cy = H / 2;
+    cv.width = W; cv.height = H;
+    let t = 0, raf: number;
+
+    // Three concentric diamond shapes rotating at different speeds
+    function drawDiamond(cx: number, cy: number, r: number, rot: number, alpha: number) {
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - r);
+      ctx.lineTo(cx + r * 0.65, cy);
+      ctx.lineTo(cx, cy + r);
+      ctx.lineTo(cx - r * 0.65, cy);
+      ctx.closePath();
+      ctx.strokeStyle = `rgba(1,41,86,${alpha})`;
+      ctx.lineWidth = 1;
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(rot);
+      ctx.translate(-cx, -cy);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // Fine grid dots
+    const dots: {x:number;y:number;phase:number}[] = [];
+    for (let x = 40; x < W - 20; x += 36) {
+      for (let y = 30; y < H - 20; y += 36) {
+        dots.push({ x, y, phase: Math.random() * Math.PI * 2 });
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+
+      // Dots
+      dots.forEach(d => {
+        const pulse = (Math.sin(t * 0.03 + d.phase) + 1) / 2;
+        ctx.beginPath(); ctx.arc(d.x, d.y, 1, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(1,41,86,${0.06 + pulse * 0.08})`; ctx.fill();
+      });
+
+      // Diamonds
+      drawDiamond(cx, cy, 110, t * 0.006, 0.12);
+      drawDiamond(cx, cy, 78, -t * 0.009, 0.18);
+      drawDiamond(cx, cy, 46, t * 0.014, 0.28);
+
+      // Thin cross lines
+      ctx.beginPath(); ctx.moveTo(cx - 130, cy); ctx.lineTo(cx + 130, cy);
+      ctx.strokeStyle = 'rgba(1,41,86,0.06)'; ctx.lineWidth = 1; ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx, cy - 130); ctx.lineTo(cx, cy + 130);
+      ctx.stroke();
+
+      // Centre dot
+      const pulse = (Math.sin(t * 0.05) + 1) / 2;
+      ctx.beginPath(); ctx.arc(cx, cy, 5 + pulse * 2, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(1,41,86,${0.35 + pulse * 0.2})`; ctx.fill();
+      ctx.beginPath(); ctx.arc(cx, cy, 12 + pulse * 3, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(1,41,86,${0.12 + pulse * 0.06})`; ctx.lineWidth = 1; ctx.stroke();
+
+      t += 1;
+      raf = requestAnimationFrame(draw);
+    }
+    draw();
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <canvas ref={ref} width={380} height={300} style={{ display: 'block', maxWidth: '100%', opacity: 0.88 }} />
+    </div>
+  );
+}
+
 const ABOUT_CARDS = [
-  { icon: <BarChart3 size={20} />, color: 'teal' as const, title: 'Research-Driven Investing', body: 'Combining deep fundamental research with disciplined portfolio construction to identify long-term wealth creation opportunities.' },
-  { icon: <Shield size={20} />,    color: 'blue' as const, title: 'Adaptive Capital Allocation', body: 'A flexible investment framework designed to respond to evolving market conditions and emerging opportunities.' },
-  { icon: <TrendingUp size={20} />, color: 'neutral' as const, title: 'Quantitative Insights', body: 'Proprietary analytical models and probabilistic frameworks enhance investment decision-making.' },
-  { icon: <Cpu size={20} />,       color: 'teal' as const, title: 'Risk-Conscious Approach', body: 'Capital preservation remains central through active monitoring, position sizing, and exposure management.' },
+  { color: 'teal' as const, title: 'Research-Driven Investing', body: 'Combining deep fundamental research with disciplined portfolio construction to identify long-term wealth creation opportunities.' },
+  { color: 'blue' as const, title: 'Adaptive Capital Allocation', body: 'A flexible investment framework designed to respond to evolving market conditions and emerging opportunities.' },
+  { color: 'neutral' as const, title: 'Quantitative Insights', body: 'Proprietary analytical models and probabilistic frameworks enhance investment decision-making.' },
+  { color: 'teal' as const, title: 'Risk-Conscious Approach', body: 'Capital preservation remains central through active monitoring, position sizing, and exposure management.' },
 ];
 
 const PHIL = [
-  { n: '01', icon: <BarChart3 size={22} />, c: 'teal' as const, title: 'Market Regime Intelligence', body: 'Assessing macro, liquidity, valuation, and market structure to understand prevailing market conditions.', tag: 'Top-Down Intelligence' },
-  { n: '02', icon: <Shield size={22} />,    c: 'blue' as const, title: 'Quantitative Analytics', body: 'Leveraging proprietary screeners, probabilistic models, and data-driven insights for decision support.', tag: '' },
-  { n: '03', icon: <TrendingUp size={22} />, c: 'neutral' as const, title: 'Fundamental Research', body: 'Evaluating business quality, growth potential, management capability, and financial strength.', tag: 'Absolute Returns Focus' },
-  { n: '04', icon: <Cpu size={22} />, c: 'teal' as const, title: 'Probabilistic Positioning', body: 'Size allocation tied explicitly to probability metrics and reward-to-risk asymmetry — eliminating emotional bias from every decision.', tag: 'Disciplined Framework' },
+  { n: '01', c: 'teal' as const, title: 'Market Regime Intelligence', body: 'Assessing macro, liquidity, valuation, and market structure to understand prevailing market conditions.', tag: 'Top-Down Intelligence' },
+  { n: '02', c: 'blue' as const, title: 'Quantitative Analytics', body: 'Leveraging proprietary screeners, probabilistic models, and data-driven insights for decision support.', tag: '' },
+  { n: '03', c: 'neutral' as const, title: 'Fundamental Research', body: 'Evaluating business quality, growth potential, management capability, and financial strength.', tag: 'Absolute Returns Focus' },
+  { n: '04', c: 'teal' as const, title: 'Probabilistic Positioning', body: 'Size allocation tied explicitly to probability metrics and reward-to-risk asymmetry — eliminating emotional bias from every decision.', tag: 'Disciplined Framework' },
 ];
 
 const FUND_USP = [
@@ -233,16 +369,11 @@ export default function HomeView({ setView }: Props) {
         <div style={{ position:'absolute',inset:0,backgroundImage:'linear-gradient(rgba(1,41,86,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(1,41,86,0.04) 1px,transparent 1px)',backgroundSize:'72px 72px',pointerEvents:'none' }} />
         <div style={{ position:'absolute',inset:0,background:'radial-gradient(ellipse at 50% 0%,rgba(242,240,235,0) 30%,rgba(242,240,235,0.55) 100%)',pointerEvents:'none' }} />
 
-        {/* Top strip */}
-        <div style={{ position:'relative',zIndex:2,display:'flex',justifyContent:'space-between',alignItems:'center',padding: mob ? '16px 5vw 0' : '26px 5vw 0', flexWrap: 'wrap', gap: 8 }}>
-          <div style={{ display:'inline-flex',alignItems:'center',gap:8,border:'1px solid rgba(0,0,0,0.16)',background:'rgba(255,255,255,0.6)',backdropFilter:'blur(8px)',borderRadius:100,padding:'6px 16px 6px 10px',fontFamily:"'DM Mono',monospace",fontSize:'0.62rem',letterSpacing:'0.15em',textTransform:'uppercase',color:'var(--ink-2)' }}>
-            <span style={{ display:'inline-block',width:7,height:7,borderRadius:'50%',background:'var(--teal)' }} />
-            Category III Alternative Investment Fund · SEBI Registered
-          </div>
+        {/* Top strip — Est. 2026 only, SEBI pill removed */}
+        <div style={{ position:'relative',zIndex:2,display:'flex',justifyContent:'flex-end',alignItems:'center',padding: mob ? '16px 5vw 0' : '26px 5vw 0' }}>
           <span style={{ fontFamily:"'DM Mono',monospace",fontSize:'0.62rem',letterSpacing:'0.12em',color:'var(--ink-3)' }}>Est. 2026</span>
         </div>
 
-        {/* Mobile: canvas on top, text below. Desktop: text left, canvas right */}
         {mob ? (
           <>
             <div style={{ position:'relative',zIndex:1,padding:'24px 5vw 0',display:'flex',justifyContent:'center' }}>
@@ -253,11 +384,11 @@ export default function HomeView({ setView }: Props) {
                 <div style={{ fontFamily:"'Cormorant Garamond','Instrument Serif',serif",fontSize:'clamp(3.2rem,12vw,5rem)',fontWeight:600,lineHeight:0.95,letterSpacing:'-0.03em',color:'var(--ink)' }}>Super</div>
                 <div style={{ fontFamily:"'Cormorant Garamond','Instrument Serif',serif",fontSize:'clamp(3.2rem,12vw,5rem)',fontWeight:600,lineHeight:0.95,letterSpacing:'-0.03em',color:'var(--teal)',fontStyle:'italic' }}>Capital</div>
               </motion.div>
-              <motion.div initial={{ opacity:0,y:22 }} animate={{ opacity:1,y:0 }} transition={{ delay:0.2,duration:0.6 }} style={{ marginTop:'1.4rem',marginBottom:'1.4rem' }}>
+              <motion.div initial={{ opacity:0,y:22 }} animate={{ opacity:1,y:0 }} transition={{ delay:0.2,duration:0.6 }} style={{ marginTop:'1.4rem',marginBottom:'1.2rem' }}>
                 <QuantamentalWord />
               </motion.div>
               <motion.div initial={{ opacity:0,y:22 }} animate={{ opacity:1,y:0 }} transition={{ delay:0.3,duration:0.6 }}>
-                <p style={{ fontSize:'0.95rem',color:'var(--ink-2)',lineHeight:1.75,marginBottom:'2rem',fontWeight:300 }}>Super Performance Series I is an actively managed Category III AIF focused on long-term capital appreciation through concentrated investing, dynamic allocation, and research-driven decision-making.</p>
+                <MarqueeTicker />
               </motion.div>
               <motion.div initial={{ opacity:0,y:22 }} animate={{ opacity:1,y:0 }} transition={{ delay:0.4,duration:0.6 }} style={{ display:'flex',gap:'1rem',flexWrap:'wrap' }}>
                 <Btn onClick={() => setView('fund')}>Explore the Fund</Btn>
@@ -267,19 +398,19 @@ export default function HomeView({ setView }: Props) {
           </>
         ) : (
           <>
-            <div style={{ position:'absolute',right:'3vw',top:'50%',transform:'translateY(-44%)',zIndex:1,pointerEvents:'none' }}>
+            <div style={{ position:'absolute',right:'2vw',top:'50%',transform:'translateY(-46%)',zIndex:1,pointerEvents:'none' }}>
               <HeroOrrery />
             </div>
-            <div style={{ position:'relative',zIndex:2,flex:1,display:'flex',flexDirection:'column',justifyContent:'center',padding:'50px 5vw 0' }}>
+            <div style={{ position:'relative',zIndex:2,flex:1,display:'flex',flexDirection:'column',justifyContent:'flex-start',padding:'100px 4.5vw 0' }}>
               <motion.div initial={{ opacity:0,y:22 }} animate={{ opacity:1,y:0 }} transition={{ duration:0.6 }}>
-                <div style={{ fontFamily:"'Cormorant Garamond','Instrument Serif',serif",fontSize:'clamp(4rem,7.5vw,8rem)',fontWeight:600,lineHeight:0.95,letterSpacing:'-0.03em',color:'var(--ink)' }}>Super</div>
-                <div style={{ fontFamily:"'Cormorant Garamond','Instrument Serif',serif",fontSize:'clamp(4rem,7.5vw,8rem)',fontWeight:600,lineHeight:0.95,letterSpacing:'-0.03em',color:'var(--teal)',fontStyle:'italic' }}>Capital</div>
+                <div style={{ fontFamily:"'Cormorant Garamond','Instrument Serif',serif",fontSize:'clamp(8rem,8.5vw,15rem)',fontWeight:600,lineHeight:0.95,letterSpacing:'-0.03em',color:'var(--ink)' }}>Super</div>
+                <div style={{ fontFamily:"'Cormorant Garamond','Instrument Serif',serif",fontSize:'clamp(4rem,7.5vw,15rem)',fontWeight:600,lineHeight:0.95,letterSpacing:'-0.03em',color:'var(--teal)',fontStyle:'italic' }}>Capital</div>
               </motion.div>
               <motion.div initial={{ opacity:0,y:22 }} animate={{ opacity:1,y:0 }} transition={{ delay:0.2,duration:0.6 }}>
-                <div style={{ marginBottom:'1.8rem',marginTop:'1.2rem' }}><QuantamentalWord /></div>
+                <div style={{ marginBottom:'1rem',marginTop:'1.2rem' }}><QuantamentalWord /></div>
               </motion.div>
               <motion.div initial={{ opacity:0,y:22 }} animate={{ opacity:1,y:0 }} transition={{ delay:0.3,duration:0.6 }}>
-                <p style={{ fontSize:'clamp(0.95rem,1.2vw,1.05rem)',color:'var(--ink-2)',maxWidth:500,lineHeight:1.75,marginBottom:'2.5rem',fontWeight:300 }}>Super Performance Series I is an actively managed Category III AIF focused on long-term capital appreciation through concentrated investing, dynamic allocation, and research-driven decision-making.</p>
+                <MarqueeTicker />
               </motion.div>
               <motion.div initial={{ opacity:0,y:22 }} animate={{ opacity:1,y:0 }} transition={{ delay:0.4,duration:0.6 }} style={{ display:'flex',gap:'1rem',flexWrap:'wrap' }}>
                 <Btn onClick={() => setView('fund')}>Explore the Fund</Btn>
@@ -290,20 +421,21 @@ export default function HomeView({ setView }: Props) {
         )}
       </section>
 
-      {/* ABOUT */}
+      {/* ABOUT — paragraph removed, decorative graphic added */}
       <Section>
         <TwoCol ratio="1fr 1.15fr" gap="7vw">
           <div>
             <motion.div {...wv} transition={{ duration:0.6 }}>
               <Label>About Super Capital</Label>
-              <Display size="lg" style={{ marginBottom:'1.4rem' }}>Active research.<br /><It>Tactical precision.</It></Display>
-              <Body style={{ maxWidth:420, marginBottom:'2.5rem' }}>Super Performance Series I is an actively managed Category III AIF focused on long-term capital appreciation through concentrated investing, dynamic allocation, and disciplined research. The strategy combines quantitative intelligence, market regime assessment, and fundamental analysis to identify high-conviction opportunities across market cycles.</Body>
+              <Display size="lg" style={{ marginBottom:'2rem' }}>Active research.<br /><It>Tactical precision.</It></Display>
+              {/* Decorative graphic replaces paragraph */}
+              <AboutGraphic />
             </motion.div>
           </div>
           <Grid cols={2} gap={14}>
             {ABOUT_CARDS.map((c,i) => (
               <motion.div key={c.title} {...wv} transition={{ delay:i*0.1,duration:0.6 }}>
-                <Card><CardIcon color={c.color}>{c.icon}</CardIcon><CardTitle>{c.title}</CardTitle><CardBody>{c.body}</CardBody></Card>
+                <Card style={{ height: '100%' }}><CardTitle>{c.title}</CardTitle><CardBody>{c.body}</CardBody></Card>
               </motion.div>
             ))}
           </Grid>
@@ -326,7 +458,7 @@ export default function HomeView({ setView }: Props) {
               <div style={{ fontFamily:"'Cormorant Garamond','Instrument Serif',serif",fontSize:'clamp(2.4rem,4vw,4.2rem)',fontWeight:600,lineHeight:1.05,letterSpacing:'-0.025em',color:'#fff',marginBottom:'1rem' }}>
                 Super<br /><em style={{ fontStyle:'italic',color:'rgba(160,195,255,0.9)' }}>Performance</em><br />Series I
               </div>
-              <p style={{ fontSize:'0.92rem',color:'rgba(255,255,255,0.55)',lineHeight:1.8,maxWidth:400,marginBottom:'2rem' }}>A Category III AIF deploying concentrated, research-led strategies across India's capital markets with dynamic risk overlays.</p>
+              <p style={{ fontSize:'0.92rem',color:'rgba(255,255,255,0.55)',lineHeight:1.8,maxWidth:400,marginBottom:'2rem' }}>An open ended Category III AIF deploying concentrated, research-led strategies across India's capital markets with dynamic risk overlays.</p>
               <Btn variant="ghost" onClick={() => setView('fund')}>View Fund Details</Btn>
             </div>
             <div style={{ display:'grid',gridTemplateColumns:'1fr 1fr',gap:12 }}>
@@ -342,19 +474,30 @@ export default function HomeView({ setView }: Props) {
         </motion.div>
       </Section>
 
-      {/* PHILOSOPHY */}
+      {/* PHILOSOPHY — para removed, font matched to "Who We Serve", equal card heights */}
       <Section style={{ paddingTop:0 }}>
-        <div style={{ display:'grid',gridTemplateColumns: mob ? '1fr' : '1fr 1fr',gap: mob ? '1.5rem' : '6vw',alignItems:'end',marginBottom:'3.5rem' }}>
-          <div><Label>Investment Philosophy</Label><Display size="lg">The four pillars of our<br /><It>quantamental</It> edge.</Display></div>
-          <Body style={{ maxWidth:400 }}>We approach markets with structured discipline — combining the intuition of fundamental research with the rigour of quantitative systems.</Body>
+        <div style={{ marginBottom:'3.5rem' }}>
+          <Label>Investment Philosophy</Label>
+          {/* Font style matched to "Who We Serve" section heading */}
+          <div style={{
+            fontFamily: "'Cormorant Garamond', 'Instrument Serif', serif",
+            fontSize: 'clamp(2.2rem,3.5vw,3.5rem)',
+            fontWeight: 600,
+            letterSpacing: '-0.025em',
+            lineHeight: 1.1,
+            color: 'var(--ink)',
+          }}>
+            The four pillars of our<br /><em style={{ fontStyle:'italic', color:'var(--teal)' }}>quantamental</em> edge.
+          </div>
         </div>
-        <Grid cols={mob ? 1 : 4} gap={14}>
+        {/* Equal-height grid via align-items stretch */}
+        <div style={{ display:'grid',gridTemplateColumns: mob ? '1fr' : 'repeat(4,1fr)',gap:14,alignItems:'stretch' }}>
           {PHIL.map((p,i) => (
-            <motion.div key={p.title} {...wv} transition={{ delay:i*0.1,duration:0.6 }}>
+            <motion.div key={p.title} {...wv} transition={{ delay:i*0.1,duration:0.6 }} style={{ display:'flex' }}>
               <PhilCard {...p}/>
             </motion.div>
           ))}
-        </Grid>
+        </div>
       </Section>
 
       {/* Who We Serve */}
@@ -396,15 +539,15 @@ export default function HomeView({ setView }: Props) {
   );
 }
 
-function PhilCard({ n, icon, c, title, body, tag }: { n:string;icon:React.ReactNode;c:'teal'|'blue'|'neutral';title:string;body:string;tag:string }) {
+// Equal-height Phil cards — no icon, even sizing via flex:1
+function PhilCard({ n, c, title, body, tag }: { n:string; c:'teal'|'blue'|'neutral'; title:string; body:string; tag:string }) {
   const cols = { teal:{bg:'var(--teal-bg)',fg:'var(--teal)'}, blue:{bg:'var(--blue-bg)',fg:'var(--blue)'}, neutral:{bg:'rgba(0,0,0,0.05)',fg:'var(--ink-2)'} };
   const [hov,setHov] = React.useState(false);
   return (
-    <div onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)} style={{ background:'var(--bg-card)',border:'1px solid var(--border)',borderRadius:16,padding:'2rem 1.6rem',position:'relative',overflow:'hidden',cursor:'default',transition:'transform 0.35s,box-shadow 0.35s',transform:hov?'translateY(-6px)':'none',boxShadow:hov?'0 20px 60px rgba(0,0,0,0.1)':'none' }}>
+    <div onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)} style={{ flex:1,background:'var(--bg-card)',border:'1px solid var(--border)',borderRadius:16,padding:'2rem 1.6rem',position:'relative',overflow:'hidden',cursor:'default',transition:'transform 0.35s,box-shadow 0.35s',transform:hov?'translateY(-6px)':'none',boxShadow:hov?'0 20px 60px rgba(0,0,0,0.1)':'none',display:'flex',flexDirection:'column' }}>
       <div style={{ fontFamily:"'Instrument Serif',serif",fontSize:'3.5rem',fontWeight:400,color:'rgba(0,0,0,0.06)',lineHeight:1,position:'absolute',top:'1.2rem',right:'1.4rem',pointerEvents:'none' }}>{n}</div>
-      <div style={{ width:44,height:44,borderRadius:11,background:cols[c].bg,color:cols[c].fg,display:'flex',alignItems:'center',justifyContent:'center',marginBottom:'1.4rem' }}>{icon}</div>
-      <div style={{ fontSize:'1rem',fontWeight:500,marginBottom:'0.7rem' }}>{title}</div>
-      <div style={{ fontSize:'0.8rem',color:'var(--ink-3)',lineHeight:1.7 }}>{body}</div>
+      <div style={{ fontSize:'1rem',fontWeight:500,marginBottom:'0.7rem',marginTop:'0.4rem' }}>{title}</div>
+      <div style={{ fontSize:'0.8rem',color:'var(--ink-3)',lineHeight:1.7,flex:1 }}>{body}</div>
       {tag && <div style={{ display:'inline-flex',alignItems:'center',marginTop:'1.3rem',fontFamily:"'DM Mono',monospace",fontSize:'0.6rem',letterSpacing:'0.12em',textTransform:'uppercase',padding:'4px 10px',borderRadius:100,background:cols[c].bg,color:cols[c].fg,opacity:hov?1:0,transform:hov?'translateY(0)':'translateY(6px)',transition:'opacity 0.3s,transform 0.3s' }}>{tag}</div>}
     </div>
   );

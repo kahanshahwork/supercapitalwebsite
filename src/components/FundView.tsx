@@ -283,11 +283,11 @@ export default function FundView({ setView }: Props) {
         <div style={{ display: 'grid', gridTemplateColumns: typeof window !== 'undefined' && window.innerWidth <= 768 ? '1fr' : '1fr 1fr', gap: '4vw', alignItems: 'center', position: 'relative', zIndex: 1 }}>
           <div>
             <motion.div {...wv(0)}>
-              <Label>Super Performance Series I</Label>
+              <Label>Category III Open ended fund</Label>
             </motion.div>
             <motion.div {...wv(0.5)}>
               <Display size="xl" style={{ marginBottom: '2rem', lineHeight: 1.0 }}>
-                An Actively<br />Managed<br /><It>Category III AIF.</It>
+                Super <br />Performance <br /><It>Series I.</It>
               </Display>
             </motion.div>
             <motion.div {...wv(1)}>
